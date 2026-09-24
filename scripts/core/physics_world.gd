@@ -8,6 +8,7 @@ var particles: Array[Particle] = []
 var electric_field: ElectricField = ElectricField.new()
 var magnetic_field: MagneticField = MagneticField.new()
 var interaction_system: InteractionSystem = InteractionSystem.new()
+var annihilation_system: AnnihilationSystem = AnnihilationSystem.new()
 var bounds: Rect2 = Rect2(-100000, -100000, 200000, 200000)
 
 var time: float = 0.0
@@ -50,6 +51,10 @@ func step(dt: float) -> void:
 			p.alive = false
 		if trails_enabled:
 			p.record_trail()
+
+	var new_photons := annihilation_system.process(self)
+	for photon in new_photons:
+		photon.trail_enabled = trails_enabled
 
 	time += dt
 	if particles.any(func(p): return not p.alive):

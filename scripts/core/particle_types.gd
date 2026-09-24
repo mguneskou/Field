@@ -33,6 +33,22 @@ static func neutral() -> ParticleType:
 	t.color = Color(0.82, 0.84, 0.88)
 	return t
 
+## Same charge/mass as positive/negative — annihilation requires equal
+## rest masses, and this game's "positive"/"negative" already share one.
+## Kept as distinct named types so a level (or AnnihilationSystem) can
+## specifically ask for "these are the ones that annihilate."
+static func electron() -> ParticleType:
+	var t := negative()
+	t.id = "electron"
+	t.display_name = "Electron"
+	return t
+
+static func positron() -> ParticleType:
+	var t := positive()
+	t.id = "positron"
+	t.display_name = "Positron"
+	return t
+
 ## Massless, chargeless — always free-streams at whatever speed it's given
 ## (see PhysicsIntegrator's massless handling) and is untouched by any
 ## field or Coulomb force. Used by AnnihilationSystem's gamma-ray products.
@@ -54,5 +70,9 @@ static func by_id(id: String) -> ParticleType:
 			return negative()
 		"photon":
 			return photon()
+		"electron":
+			return electron()
+		"positron":
+			return positron()
 		_:
 			return neutral()

@@ -12,6 +12,7 @@ func _init() -> void:
 		"res://tests/test_objective.gd",
 		"res://tests/test_relativity.gd",
 		"res://tests/test_conservation.gd",
+		"res://tests/test_annihilation.gd",
 	]
 
 	var total_pass := 0
