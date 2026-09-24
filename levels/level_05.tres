@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="LevelDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/level/obstacle_definition.gd" id="1_spqct"]
+[ext_resource type="Script" path="res://scripts/level/particle_spawn.gd" id="2_0ysph"]
+[ext_resource type="Script" path="res://scripts/level/level_definition.gd" id="3_f84e3"]
+[ext_resource type="Script" path="res://scripts/level/target_definition.gd" id="4_o6y8y"]
+
+[sub_resource type="Resource" id="Resource_yqtgx"]
+script = ExtResource("1_spqct")
+position = Vector2(640, 400)
+radius = 50.0
+
+[sub_resource type="Resource" id="Resource_425n8"]
+script = ExtResource("2_0ysph")
+position = Vector2(200, 400)
+
+[sub_resource type="Resource" id="Resource_77iry"]
+script = ExtResource("4_o6y8y")
+position = Vector2(1000, 200)
+radius = 40.0
+
+[resource]
+script = ExtResource("3_f84e3")
+id = "level_05"
+level_name = "Level 5 — Electric + Magnetic"
+tutorial_text = "Combine both fields: push the charge forward with E, then bend its path with B to curve around the obstacle and into the target."
+difficulty = 3
+particles = Array[ExtResource("2_0ysph")]([SubResource("Resource_425n8")])
+field_strength_min = 0.0
+field_strength_max = 120.0
+magnetic_editable = true
+magnetic_strength_min = -40.0
+magnetic_strength_max = 40.0
+targets = Array[ExtResource("4_o6y8y")]([SubResource("Resource_77iry")])
+obstacles = Array[ExtResource("1_spqct")]([SubResource("Resource_yqtgx")])

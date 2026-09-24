@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="LevelDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/level/obstacle_definition.gd" id="1_7h3od"]
+[ext_resource type="Script" path="res://scripts/level/particle_spawn.gd" id="2_uktp3"]
+[ext_resource type="Script" path="res://scripts/level/level_definition.gd" id="3_0svt7"]
+[ext_resource type="Script" path="res://scripts/level/target_definition.gd" id="4_5byca"]
+
+[sub_resource type="Resource" id="Resource_5730c"]
+script = ExtResource("2_uktp3")
+position = Vector2(200, 360)
+
+[sub_resource type="Resource" id="Resource_u7125"]
+script = ExtResource("4_5byca")
+position = Vector2(1080, 360)
+radius = 32.0
+
+[resource]
+script = ExtResource("3_0svt7")
+id = "level_01"
+level_name = "Level 1 — Positive Charge"
+tutorial_text = "Positive charges accelerate WITH the electric field (F = qE). Drag the dial to point a field at the target."
+particles = Array[ExtResource("2_uktp3")]([SubResource("Resource_5730c")])
+field_strength_min = 0.0
+field_strength_max = 60.0
+targets = Array[ExtResource("4_5byca")]([SubResource("Resource_u7125")])

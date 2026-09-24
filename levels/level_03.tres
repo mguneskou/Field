@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="LevelDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/level/obstacle_definition.gd" id="1_oagrl"]
+[ext_resource type="Script" path="res://scripts/level/particle_spawn.gd" id="2_p27re"]
+[ext_resource type="Script" path="res://scripts/level/level_definition.gd" id="3_4pk2o"]
+[ext_resource type="Script" path="res://scripts/level/target_definition.gd" id="4_8l8ny"]
+
+[sub_resource type="Resource" id="Resource_pej55"]
+script = ExtResource("2_p27re")
+position = Vector2(640, 600)
+
+[sub_resource type="Resource" id="Resource_j07wq"]
+script = ExtResource("4_8l8ny")
+position = Vector2(950, 200)
+radius = 34.0
+
+[resource]
+script = ExtResource("3_4pk2o")
+id = "level_03"
+level_name = "Level 3 — Field Direction"
+tutorial_text = "This field's strength is fixed — only its direction is yours to control. Aim carefully to reach the target."
+difficulty = 2
+particles = Array[ExtResource("2_p27re")]([SubResource("Resource_pej55")])
+initial_field_direction = Vector2(0, -1)
+initial_field_strength = 40.0
+field_strength_editable = false
+field_strength_min = 40.0
+field_strength_max = 40.0
+targets = Array[ExtResource("4_8l8ny")]([SubResource("Resource_j07wq")])

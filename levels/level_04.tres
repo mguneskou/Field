@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="LevelDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/level/obstacle_definition.gd" id="1_wtxqk"]
+[ext_resource type="Script" path="res://scripts/level/particle_spawn.gd" id="2_7pv1w"]
+[ext_resource type="Script" path="res://scripts/level/level_definition.gd" id="3_hpe6l"]
+[ext_resource type="Script" path="res://scripts/level/target_definition.gd" id="4_3ot61"]
+
+[sub_resource type="Resource" id="Resource_i6ftk"]
+script = ExtResource("2_7pv1w")
+position = Vector2(150, 360)
+
+[sub_resource type="Resource" id="Resource_kfr7b"]
+script = ExtResource("4_3ot61")
+position = Vector2(950, 360)
+radius = 32.0
+
+[resource]
+script = ExtResource("3_hpe6l")
+id = "level_04"
+level_name = "Level 4 — Field Strength"
+tutorial_text = "This time only field strength is yours to control — and the clock is ticking. Too weak, and you won't make it in time."
+difficulty = 2
+particles = Array[ExtResource("2_7pv1w")]([SubResource("Resource_i6ftk")])
+field_direction_editable = false
+field_strength_min = 0.0
+field_strength_max = 240.0
+targets = Array[ExtResource("4_3ot61")]([SubResource("Resource_kfr7b")])
+time_limit = 3.0

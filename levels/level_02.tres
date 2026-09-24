@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="LevelDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/level/obstacle_definition.gd" id="1_ebs2p"]
+[ext_resource type="Script" path="res://scripts/level/particle_spawn.gd" id="2_p7dop"]
+[ext_resource type="Script" path="res://scripts/level/level_definition.gd" id="3_1p2ry"]
+[ext_resource type="Script" path="res://scripts/level/target_definition.gd" id="4_ub3p4"]
+
+[sub_resource type="Resource" id="Resource_8c0un"]
+script = ExtResource("2_p7dop")
+type_id = "negative"
+position = Vector2(1080, 360)
+
+[sub_resource type="Resource" id="Resource_e4cd2"]
+script = ExtResource("4_ub3p4")
+position = Vector2(200, 360)
+radius = 32.0
+
+[resource]
+script = ExtResource("3_1p2ry")
+id = "level_02"
+level_name = "Level 2 — Negative Charge"
+tutorial_text = "Negative charges accelerate AGAINST the field direction. Point the field away from the target to push the charge toward it."
+particles = Array[ExtResource("2_p7dop")]([SubResource("Resource_8c0un")])
+field_strength_min = 0.0
+field_strength_max = 60.0
+targets = Array[ExtResource("4_ub3p4")]([SubResource("Resource_e4cd2")])
