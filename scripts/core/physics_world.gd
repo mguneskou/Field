@@ -35,15 +35,16 @@ func step(dt: float) -> void:
 	for p in particles:
 		if not p.alive:
 			continue
-		var force := Vector2.ZERO
-		force += electric_field.force_on(p)
-		force += magnetic_field.force_on(p)
-		force += interaction_forces.get(p, Vector2.ZERO)
+		var interaction_force: Vector2 = interaction_forces.get(p, Vector2.ZERO)
+		var e_like_force: Vector2 = electric_field.force_on(p) + interaction_force
 
 		if relativistic:
-			PhysicsIntegrator.integrate_relativistic(p, force, dt, speed_of_light)
+			# Relativistic + magnetic is a rarer combination not yet exercised
+			# by any level; combine forces simply rather than extend Boris to
+			# the relativistic case.
+			PhysicsIntegrator.integrate_relativistic(p, e_like_force + magnetic_field.force_on(p), dt, speed_of_light)
 		else:
-			PhysicsIntegrator.integrate(p, force, dt)
+			PhysicsIntegrator.integrate_boris(p, e_like_force, magnetic_field.get_field_at(p.position), dt)
 		p.update_lifetime(dt)
 		if not bounds.has_point(p.position):
 			p.alive = false

@@ -14,6 +14,13 @@ var type_id: String = "neutral"
 var color: Color = Color.WHITE
 var spawn_index: int = -1 # stable identity from the level's particle list, survives array filtering
 
+## Meaningful only for massless particles (mass ~ 0): a photon's velocity
+## always has magnitude c, which by itself carries no information about
+## how energetic it is. |momentum| = energy/c is stored here explicitly
+## instead, set by whatever created the photon (e.g. AnnihilationSystem).
+## Ignored for every massive particle type.
+var momentum_magnitude: float = 0.0
+
 var lifetime: float = -1.0 # -1 = infinite
 var age: float = 0.0
 var alive: bool = true

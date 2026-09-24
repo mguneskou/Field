@@ -51,8 +51,9 @@ func test_moving_charge_produces_circular_motion() -> void:
 	var initial_speed := p.velocity.length()
 	for i in range(120):
 		world.step(1.0 / 60.0)
-	# Semi-implicit Euler has a small, well-known energy drift on curved
-	# paths; a tight tolerance here would test the integrator, not the
-	# physics law, so we allow a modest margin.
-	assert_almost_eq(p.velocity.length(), initial_speed, initial_speed * 0.1,
-		"magnetic force should not change speed much, only direction")
+	# PhysicsWorld uses the Boris integrator for magnetic forces, which
+	# preserves |v| exactly under a pure B field (unlike naive semi-implicit
+	# Euler, which has a well-known secular energy drift) — so this can be
+	# a tight tolerance, not just a sanity check.
+	assert_almost_eq(p.velocity.length(), initial_speed, initial_speed * 0.001,
+		"the Boris integrator should conserve speed almost exactly under a pure magnetic field")
