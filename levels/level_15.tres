@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="LevelDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/level/obstacle_definition.gd" id="1_hvvkv"]
+[ext_resource type="Script" path="res://scripts/level/particle_spawn.gd" id="2_rbrmh"]
+[ext_resource type="Script" path="res://scripts/level/level_definition.gd" id="3_x6ejo"]
+[ext_resource type="Script" path="res://scripts/level/target_definition.gd" id="4_vbbx7"]
+
+[sub_resource type="Resource" id="Resource_2ugaa"]
+script = ExtResource("1_hvvkv")
+position = Vector2(640, 360)
+radius = 55.0
+
+[sub_resource type="Resource" id="Resource_gg38x"]
+script = ExtResource("2_rbrmh")
+position = Vector2(150, 360)
+
+[sub_resource type="Resource" id="Resource_5q6tr"]
+script = ExtResource("4_vbbx7")
+position = Vector2(1080, 250)
+radius = 34.0
+
+[resource]
+script = ExtResource("3_x6ejo")
+id = "level_15"
+level_name = "Level 15 — Time Constraint"
+tutorial_text = "Same idea, new pressure: curve around the obstacle and reach the target before time runs out."
+difficulty = 3
+particles = Array[ExtResource("2_rbrmh")]([SubResource("Resource_gg38x")])
+field_strength_min = 0.0
+field_strength_max = 150.0
+magnetic_editable = true
+targets = Array[ExtResource("4_vbbx7")]([SubResource("Resource_5q6tr")])
+obstacles = Array[ExtResource("1_hvvkv")]([SubResource("Resource_2ugaa")])
+time_limit = 4.0

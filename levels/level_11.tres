@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="LevelDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/level/obstacle_definition.gd" id="1_l7hyg"]
+[ext_resource type="Script" path="res://scripts/level/particle_spawn.gd" id="2_ielrl"]
+[ext_resource type="Script" path="res://scripts/level/level_definition.gd" id="3_ocdth"]
+[ext_resource type="Script" path="res://scripts/level/target_definition.gd" id="4_8ko4d"]
+
+[sub_resource type="Resource" id="Resource_pby8f"]
+script = ExtResource("2_ielrl")
+position = Vector2(600, 360)
+
+[sub_resource type="Resource" id="Resource_3ed07"]
+script = ExtResource("2_ielrl")
+position = Vector2(680, 360)
+
+[sub_resource type="Resource" id="Resource_frhpp"]
+script = ExtResource("4_8ko4d")
+position = Vector2(350, 360)
+radius = 32.0
+
+[sub_resource type="Resource" id="Resource_1hon0"]
+script = ExtResource("4_8ko4d")
+position = Vector2(930, 360)
+radius = 32.0
+particle_index = 1
+
+[resource]
+script = ExtResource("3_ocdth")
+id = "level_11"
+level_name = "Level 11 — Coulomb Repulsion"
+tutorial_text = "Like charges repel through the same Coulomb force. No field needed — just watch them push apart."
+particles = Array[ExtResource("2_ielrl")]([SubResource("Resource_pby8f"), SubResource("Resource_3ed07")])
+field_direction_editable = false
+field_strength_editable = false
+coulomb_enabled = true
+targets = Array[ExtResource("4_8ko4d")]([SubResource("Resource_frhpp"), SubResource("Resource_1hon0")])

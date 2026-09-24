@@ -20,6 +20,11 @@ func _init() -> void:
 	_save(_level_08())
 	_save(_level_09())
 	_save(_level_10())
+	_save(_level_11())
+	_save(_level_12())
+	_save(_level_13())
+	_save(_level_14())
+	_save(_level_15())
 
 	print("Level generation complete.")
 	quit(0)
@@ -244,4 +249,122 @@ func _level_10() -> LevelDefinition:
 	l.objective_kind = LevelDefinition.ObjectiveKind.CAPTURE
 	l.capture_particle_a = 0
 	l.capture_particle_b = 1
+	return l
+
+func _level_11() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_11"
+	l.level_name = "Level 11 — Coulomb Repulsion"
+	l.difficulty = 1
+	l.tutorial_text = "Like charges repel through the same Coulomb force. No field needed — just watch them push apart."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [
+		_particle("positive", Vector2(600, 360)),
+		_particle("positive", Vector2(680, 360)),
+	]
+	l.coulomb_enabled = true
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = false
+	l.field_strength_editable = false
+	l.targets = [
+		_target(Vector2(350, 360), 32.0, 0),
+		_target(Vector2(930, 360), 32.0, 1),
+	]
+	return l
+
+func _level_12() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_12"
+	l.level_name = "Level 12 — Obstacles"
+	l.difficulty = 2
+	l.tutorial_text = "An obstacle blocks the straight path. Curve around it using both fields together."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [_particle("positive", Vector2(200, 400))]
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 90.0
+	l.initial_magnetic_strength = 0.0
+	l.magnetic_editable = true
+	l.magnetic_strength_min = -40.0
+	l.magnetic_strength_max = 40.0
+	l.obstacles = [_obstacle(Vector2(640, 400), 70.0)]
+	l.targets = [_target(Vector2(1050, 280), 38.0)]
+	return l
+
+func _level_13() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_13"
+	l.level_name = "Level 13 — Multiple Particles"
+	l.difficulty = 3
+	l.tutorial_text = "Three particles, one shared field. Positive and negative charges answer it differently — find a direction that gets all three home at once."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [
+		_particle("positive", Vector2(250, 130)),
+		_particle("negative", Vector2(1030, 400)),
+		_particle("positive", Vector2(250, 670)),
+	]
+	l.coulomb_enabled = false
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 70.0
+	l.targets = [
+		_target(Vector2(1030, 130), 46.0, 0),
+		_target(Vector2(250, 400), 46.0, 1),
+		_target(Vector2(1030, 670), 46.0, 2),
+	]
+	return l
+
+func _level_14() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_14"
+	l.level_name = "Level 14 — Checkpoints"
+	l.difficulty = 3
+	l.tutorial_text = "Fly through the checkpoints in order. You'll likely need to pause, change the field, and resume mid-flight."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [_particle("positive", Vector2(150, 360))]
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 90.0
+	l.initial_magnetic_strength = 0.0
+	l.magnetic_editable = true
+	l.magnetic_strength_min = -40.0
+	l.magnetic_strength_max = 40.0
+	l.objective_kind = LevelDefinition.ObjectiveKind.CHECKPOINTS
+	l.targets = [
+		_target(Vector2(450, 200), 30.0),
+		_target(Vector2(750, 520), 30.0),
+		_target(Vector2(1080, 300), 30.0),
+	]
+	return l
+
+func _level_15() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_15"
+	l.level_name = "Level 15 — Time Constraint"
+	l.difficulty = 3
+	l.tutorial_text = "Same idea, new pressure: curve around the obstacle and reach the target before time runs out."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [_particle("positive", Vector2(150, 360))]
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 150.0
+	l.initial_magnetic_strength = 0.0
+	l.magnetic_editable = true
+	l.magnetic_strength_min = -50.0
+	l.magnetic_strength_max = 50.0
+	l.obstacles = [_obstacle(Vector2(640, 360), 55.0)]
+	l.targets = [_target(Vector2(1080, 250), 34.0)]
+	l.time_limit = 4.0
 	return l

@@ -8,7 +8,8 @@ func _init() -> void:
 	root.add_child(manager)
 
 	for id in ["level_01", "level_02", "level_03", "level_04", "level_05",
-		"level_06", "level_07", "level_08", "level_09", "level_10"]:
+		"level_06", "level_07", "level_08", "level_09", "level_10",
+		"level_11", "level_12", "level_13", "level_14", "level_15"]:
 		var path := "res://levels/%s.tres" % id
 		var level: LevelDefinition = load(path)
 		if level == null:
