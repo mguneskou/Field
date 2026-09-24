@@ -1,5 +1,17 @@
 class_name TestAnnihilation
 extends TestCase
+## process() takes a plain particle snapshot and RETURNS results rather
+## than mutating world.particles directly (see AnnihilationSystem's
+## docstring for why: it lets PhysicsWorld combine annihilation and pair
+## production in one step without either seeing the other's same-step
+## output). These tests apply the returned result to world.particles
+## themselves where they need to inspect post-reaction state.
+
+func _apply(world: PhysicsWorld, result: Dictionary) -> void:
+	var consumed: Array = result["consumed"]
+	world.particles = world.particles.filter(func(p): return not (p in consumed))
+	for p in result["created"]:
+		world.particles.append(p)
 
 func test_electron_positron_at_rest_annihilate_into_two_photons() -> void:
 	var world := PhysicsWorld.new()
@@ -8,8 +20,9 @@ func test_electron_positron_at_rest_annihilate_into_two_photons() -> void:
 	world.add_particle(e)
 	world.add_particle(p)
 
-	var created := world.annihilation_system.process(world)
-	assert_eq(created.size(), 2, "an overlapping e-/e+ pair should produce exactly two photons")
+	var result := world.annihilation_system.process(world.particles, world.speed_of_light)
+	assert_eq(result["created"].size(), 2, "an overlapping e-/e+ pair should produce exactly two photons")
+	_apply(world, result)
 	assert_eq(world.particles.size(), 2, "the original electron and positron should be removed")
 	for photon in world.particles:
 		assert_eq(photon.type_id, "photon", "surviving particles should be the newly-created photons")
@@ -35,7 +48,7 @@ func test_annihilation_conserves_momentum_and_energy() -> void:
 	var momentum_before := ConservationTracker.total_momentum(world)
 	var energy_before := ConservationTracker.total_energy(world)
 
-	world.annihilation_system.process(world)
+	_apply(world, world.annihilation_system.process(world.particles, world.speed_of_light))
 
 	var momentum_after := ConservationTracker.total_momentum(world)
 	var energy_after := ConservationTracker.total_energy(world)
@@ -52,8 +65,8 @@ func test_annihilation_photons_move_at_speed_of_light() -> void:
 	world.add_particle(Particle.new(ParticleTypes.electron(), Vector2(-2, 0), Vector2(20, 0)))
 	world.add_particle(Particle.new(ParticleTypes.positron(), Vector2(2, 0), Vector2(-20, 0)))
 
-	var created := world.annihilation_system.process(world)
-	for photon in created:
+	var result := world.annihilation_system.process(world.particles, world.speed_of_light)
+	for photon in result["created"]:
 		assert_almost_eq(photon.velocity.length(), c, 0.5,
 			"every photon produced by annihilation should move at exactly c")
 
@@ -62,8 +75,8 @@ func test_non_annihilating_pair_is_left_alone() -> void:
 	world.add_particle(Particle.new(ParticleTypes.positive(), Vector2(-2, 0)))
 	world.add_particle(Particle.new(ParticleTypes.negative(), Vector2(2, 0)))
 
-	var created := world.annihilation_system.process(world)
-	assert_eq(created.size(), 0, "plain positive/negative charges should not trigger annihilation")
+	var result := world.annihilation_system.process(world.particles, world.speed_of_light)
+	assert_eq(result["created"].size(), 0, "plain positive/negative charges should not trigger annihilation")
 	assert_eq(world.particles.size(), 2, "non-annihilating particles should be untouched")
 
 func test_non_overlapping_pair_does_not_annihilate() -> void:
@@ -71,8 +84,8 @@ func test_non_overlapping_pair_does_not_annihilate() -> void:
 	world.add_particle(Particle.new(ParticleTypes.electron(), Vector2(-500, 0)))
 	world.add_particle(Particle.new(ParticleTypes.positron(), Vector2(500, 0)))
 
-	var created := world.annihilation_system.process(world)
-	assert_eq(created.size(), 0, "a distant e-/e+ pair should not annihilate until they actually touch")
+	var result := world.annihilation_system.process(world.particles, world.speed_of_light)
+	assert_eq(result["created"].size(), 0, "a distant e-/e+ pair should not annihilate until they actually touch")
 	assert_eq(world.particles.size(), 2, "particles should remain until overlap occurs")
 
 func test_disabled_annihilation_system_does_nothing() -> void:
@@ -81,15 +94,15 @@ func test_disabled_annihilation_system_does_nothing() -> void:
 	world.add_particle(Particle.new(ParticleTypes.electron(), Vector2(0, 0)))
 	world.add_particle(Particle.new(ParticleTypes.positron(), Vector2(0, 0)))
 
-	var created := world.annihilation_system.process(world)
-	assert_eq(created.size(), 0, "a disabled AnnihilationSystem should never annihilate")
+	var result := world.annihilation_system.process(world.particles, world.speed_of_light)
+	assert_eq(result["created"].size(), 0, "a disabled AnnihilationSystem should never annihilate")
 	assert_eq(world.particles.size(), 2, "particles should remain when the system is disabled")
 
 func test_photon_free_streams_and_fades_out() -> void:
 	var world := PhysicsWorld.new()
 	world.add_particle(Particle.new(ParticleTypes.electron(), Vector2(0, 0)))
 	world.add_particle(Particle.new(ParticleTypes.positron(), Vector2(0, 0)))
-	world.annihilation_system.process(world)
+	_apply(world, world.annihilation_system.process(world.particles, world.speed_of_light))
 	assert_eq(world.particles.size(), 2, "should have exactly two photons after annihilation")
 
 	var photon: Particle = world.particles[0]
@@ -100,3 +113,21 @@ func test_photon_free_streams_and_fades_out() -> void:
 	# It free-streamed for ~1 second at its own velocity.
 	assert_vec_almost_eq(photon.position, start_pos + velocity * 1.0, 2.0,
 		"a photon should free-stream at constant velocity, unaffected by any field")
+
+func test_reaction_pair_does_not_ping_pong_within_one_world_step() -> void:
+	# Regression test for a real bug caught during development: if
+	# AnnihilationSystem and PairProductionSystem each mutated
+	# world.particles directly and ran sequentially within one step,
+	# whichever ran second would immediately see the first's freshly-
+	# created, still-exactly-co-located output and reverse it — an
+	# electron+positron pair would silently never actually annihilate.
+	# A single high-energy e-/e+ pair should settle into exactly two
+	# photons after one world.step(), not flicker back.
+	var world := PhysicsWorld.new()
+	world.speed_of_light = 50.0 # low c keeps rest-mass energy modest so 2mc^2 is easy to check against
+	world.add_particle(Particle.new(ParticleTypes.electron(), Vector2(0, 0)))
+	world.add_particle(Particle.new(ParticleTypes.positron(), Vector2(0, 0)))
+	world.step(1.0 / 60.0)
+	assert_eq(world.particles.size(), 2, "an e-/e+ pair should end a step as exactly two particles, not toggle")
+	for p in world.particles:
+		assert_eq(p.type_id, "photon", "the pair should have annihilated into photons, not reverted")

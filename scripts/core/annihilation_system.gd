@@ -17,15 +17,22 @@ extends RefCounted
 var enabled: bool = true
 var pairs: Array[Array] = [["electron", "positron"]] # extend here for future annihilating pairs
 
-## Scans world.particles for overlapping annihilating pairs, replaces each
-## with two photons, and returns the photons created (empty if none).
-func process(world: PhysicsWorld) -> Array[Particle]:
+## Scans a snapshot of particles for overlapping annihilating pairs.
+## Returns {"created": Array[Particle], "consumed": Array[Particle]} —
+## does NOT mutate the list itself. This matters: if this ran against a
+## live, already-mutated particle list that PairProductionSystem had
+## just added to in the same step, a freshly-created electron/positron
+## pair (still exactly co-located with its photon parents' collision
+## point) would immediately re-match and annihilate right back — an
+## invisible same-step ping-pong. PhysicsWorld takes a snapshot before
+## running either reaction system and applies both results together
+## afterward, so neither system ever sees the other's same-step output.
+func process(particles: Array[Particle], speed_of_light: float) -> Dictionary:
 	var created: Array[Particle] = []
-	if not enabled:
-		return created
-
 	var to_remove: Array[Particle] = []
-	var particles := world.particles
+	if not enabled:
+		return {"created": created, "consumed": to_remove}
+
 	for i in range(particles.size()):
 		var a: Particle = particles[i]
 		if a in to_remove:
@@ -38,18 +45,13 @@ func process(world: PhysicsWorld) -> Array[Particle]:
 				continue
 			if not CollisionSystem.circles_overlap(a.position, a.radius, b.position, b.radius):
 				continue
-			var photons := _annihilate(a, b, world.speed_of_light)
+			var photons := _annihilate(a, b, speed_of_light)
 			created.append_array(photons)
 			to_remove.append(a)
 			to_remove.append(b)
 			break # a is consumed; move on to the next i
 
-	if not to_remove.is_empty():
-		var survivors: Array[Particle] = particles.filter(func(p): return not (p in to_remove))
-		world.particles = survivors
-		for photon in created:
-			world.particles.append(photon)
-	return created
+	return {"created": created, "consumed": to_remove}
 
 func _is_annihilating_pair(type_a: String, type_b: String) -> bool:
 	for pair in pairs:
