@@ -10,6 +10,7 @@ signal reset_pressed
 signal play_pause_pressed
 signal continue_requested
 signal retry_requested
+signal menu_requested
 
 var level_manager: LevelManager
 
@@ -73,10 +74,18 @@ func _panel(parent: Control) -> PanelContainer:
 	return p
 
 func _build_top_bar(root: Control) -> void:
+	var menu_button := Button.new()
+	menu_button.text = "☰ Menu"
+	menu_button.position = Vector2(24, 20)
+	menu_button.custom_minimum_size = Vector2(88, 32)
+	menu_button.mouse_filter = Control.MOUSE_FILTER_STOP
+	menu_button.pressed.connect(func(): menu_requested.emit())
+	root.add_child(menu_button)
+
 	_level_title = Label.new()
 	_level_title.add_theme_font_size_override("font_size", 20)
 	_level_title.add_theme_color_override("font_color", Color(0.9, 0.92, 0.96))
-	_level_title.position = Vector2(24, 20)
+	_level_title.position = Vector2(124, 20)
 	root.add_child(_level_title)
 
 	_science_button = Button.new()
