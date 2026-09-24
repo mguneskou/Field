@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="LevelDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/level/obstacle_definition.gd" id="1_s4x76"]
+[ext_resource type="Script" path="res://scripts/level/particle_spawn.gd" id="2_qbf21"]
+[ext_resource type="Script" path="res://scripts/level/level_definition.gd" id="3_fq5q2"]
+[ext_resource type="Script" path="res://scripts/level/target_definition.gd" id="4_h5psx"]
+
+[sub_resource type="Resource" id="Resource_wtm3i"]
+script = ExtResource("1_s4x76")
+position = Vector2(600, 380)
+radius = 55.0
+
+[sub_resource type="Resource" id="Resource_yyn8n"]
+script = ExtResource("2_qbf21")
+position = Vector2(200, 420)
+
+[sub_resource type="Resource" id="Resource_bj5e1"]
+script = ExtResource("2_qbf21")
+type_id = "neutral"
+position = Vector2(950, 260)
+
+[resource]
+script = ExtResource("3_fq5q2")
+id = "level_17"
+level_name = "Level 17 — Particle Capture"
+tutorial_text = "This neutral particle won't come to you — it ignores every field. Navigate the charged particle around the obstacle to make contact."
+difficulty = 3
+particles = Array[ExtResource("2_qbf21")]([SubResource("Resource_yyn8n"), SubResource("Resource_bj5e1")])
+field_strength_min = 0.0
+magnetic_editable = true
+magnetic_strength_min = -40.0
+magnetic_strength_max = 40.0
+objective_kind = 3
+obstacles = Array[ExtResource("1_s4x76")]([SubResource("Resource_wtm3i")])

@@ -25,6 +25,11 @@ func _init() -> void:
 	_save(_level_13())
 	_save(_level_14())
 	_save(_level_15())
+	_save(_level_16())
+	_save(_level_17())
+	_save(_level_18())
+	_save(_level_19())
+	_save(_level_20())
 
 	print("Level generation complete.")
 	quit(0)
@@ -367,4 +372,144 @@ func _level_15() -> LevelDefinition:
 	l.obstacles = [_obstacle(Vector2(640, 360), 55.0)]
 	l.targets = [_target(Vector2(1080, 250), 34.0)]
 	l.time_limit = 4.0
+	return l
+
+func _level_16() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_16"
+	l.level_name = "Level 16 — Particle Separation"
+	l.difficulty = 3
+	l.tutorial_text = "These opposite charges want to attract. Point a field strong enough, in the right direction, to force them apart to a safe distance."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [
+		_particle("positive", Vector2(600, 360)),
+		_particle("negative", Vector2(680, 360)),
+	]
+	l.coulomb_enabled = true
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 120.0
+	l.objective_kind = LevelDefinition.ObjectiveKind.SEPARATE
+	l.separate_particle_a = 0
+	l.separate_particle_b = 1
+	l.separate_distance = 350.0
+	return l
+
+func _level_17() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_17"
+	l.level_name = "Level 17 — Particle Capture"
+	l.difficulty = 3
+	l.tutorial_text = "This neutral particle won't come to you — it ignores every field. Navigate the charged particle around the obstacle to make contact."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [
+		_particle("positive", Vector2(200, 420)),
+		_particle("neutral", Vector2(950, 260)),
+	]
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 100.0
+	l.initial_magnetic_strength = 0.0
+	l.magnetic_editable = true
+	l.magnetic_strength_min = -40.0
+	l.magnetic_strength_max = 40.0
+	l.obstacles = [_obstacle(Vector2(600, 380), 55.0)]
+	l.objective_kind = LevelDefinition.ObjectiveKind.CAPTURE
+	l.capture_particle_a = 0
+	l.capture_particle_b = 1
+	return l
+
+func _level_18() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_18"
+	l.level_name = "Level 18 — Complex Field"
+	l.difficulty = 4
+	l.tutorial_text = "Two obstacles this time, in opposite corners of the path. A single field curves one way — you'll likely need to pause partway and change it to weave through both."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [_particle("positive", Vector2(150, 360))]
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 140.0
+	l.initial_magnetic_strength = 0.0
+	l.magnetic_editable = true
+	l.magnetic_strength_min = -45.0
+	l.magnetic_strength_max = 45.0
+	l.obstacles = [
+		_obstacle(Vector2(500, 250), 45.0),
+		_obstacle(Vector2(780, 480), 45.0),
+	]
+	l.targets = [_target(Vector2(1100, 360), 36.0)]
+	return l
+
+func _level_19() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_19"
+	l.level_name = "Level 19 — Open Challenge: Gauntlet"
+	l.difficulty = 4
+	l.tutorial_text = "Four checkpoints, two obstacles, your choice of path. Take your time — pause, adjust, and plan each leg."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [_particle("positive", Vector2(120, 360))]
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 150.0
+	l.initial_magnetic_strength = 0.0
+	l.magnetic_editable = true
+	l.magnetic_strength_min = -50.0
+	l.magnetic_strength_max = 50.0
+	l.obstacles = [
+		_obstacle(Vector2(450, 360), 50.0),
+		_obstacle(Vector2(830, 200), 45.0),
+	]
+	l.objective_kind = LevelDefinition.ObjectiveKind.CHECKPOINTS
+	l.targets = [
+		_target(Vector2(300, 150), 28.0),
+		_target(Vector2(620, 550), 28.0),
+		_target(Vector2(950, 400), 28.0),
+		_target(Vector2(1150, 150), 32.0),
+	]
+	return l
+
+func _level_20() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_20"
+	l.level_name = "Level 20 — Open Challenge: Against the Clock"
+	l.difficulty = 5
+	l.tutorial_text = "Everything you've learned, against the clock. Good luck."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [_particle("positive", Vector2(120, 360))]
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 180.0
+	l.initial_magnetic_strength = 0.0
+	l.magnetic_editable = true
+	l.magnetic_strength_min = -60.0
+	l.magnetic_strength_max = 60.0
+	l.obstacles = [
+		_obstacle(Vector2(400, 300), 48.0),
+		_obstacle(Vector2(750, 500), 48.0),
+		_obstacle(Vector2(980, 250), 40.0),
+	]
+	l.objective_kind = LevelDefinition.ObjectiveKind.CHECKPOINTS
+	l.targets = [
+		_target(Vector2(280, 550), 26.0),
+		_target(Vector2(600, 180), 26.0),
+		_target(Vector2(880, 550), 26.0),
+		_target(Vector2(1150, 300), 30.0),
+	]
+	l.time_limit = 10.0
 	return l
