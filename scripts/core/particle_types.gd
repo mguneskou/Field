@@ -33,11 +33,26 @@ static func neutral() -> ParticleType:
 	t.color = Color(0.82, 0.84, 0.88)
 	return t
 
+## Massless, chargeless — always free-streams at whatever speed it's given
+## (see PhysicsIntegrator's massless handling) and is untouched by any
+## field or Coulomb force. Used by AnnihilationSystem's gamma-ray products.
+static func photon() -> ParticleType:
+	var t := ParticleType.new()
+	t.id = "photon"
+	t.display_name = "Photon"
+	t.charge = 0.0
+	t.mass = 0.0
+	t.radius = 4.0
+	t.color = Color(1.0, 0.95, 0.6)
+	return t
+
 static func by_id(id: String) -> ParticleType:
 	match id:
 		"positive":
 			return positive()
 		"negative":
 			return negative()
+		"photon":
+			return photon()
 		_:
 			return neutral()
