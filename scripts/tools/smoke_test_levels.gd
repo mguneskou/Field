@@ -7,10 +7,19 @@ func _init() -> void:
 	var manager := LevelManager.new()
 	root.add_child(manager)
 
-	for id in ["level_01", "level_02", "level_03", "level_04", "level_05",
-		"level_06", "level_07", "level_08", "level_09", "level_10",
-		"level_11", "level_12", "level_13", "level_14", "level_15",
-		"level_16", "level_17", "level_18", "level_19", "level_20"]:
+	var ids: Array[String] = []
+	var dir := DirAccess.open("res://levels")
+	if dir != null:
+		dir.list_dir_begin()
+		var file_name := dir.get_next()
+		while file_name != "":
+			if file_name.ends_with(".tres"):
+				ids.append(file_name.trim_suffix(".tres"))
+			file_name = dir.get_next()
+		dir.list_dir_end()
+	ids.sort()
+
+	for id in ids:
 		var path := "res://levels/%s.tres" % id
 		var level: LevelDefinition = load(path)
 		if level == null:
