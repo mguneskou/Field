@@ -25,6 +25,7 @@ func _init() -> void:
 	_save(_level_06())
 	_save(_level_07())
 	_save(_level_08())
+	_save(_level_09())
 
 	print("Level generation complete.")
 	quit(0)
@@ -219,4 +220,25 @@ func _level_08() -> LevelDefinition:
 	l.field_strength_min = 0.0
 	l.field_strength_max = 20.0
 	l.targets = [_target(Vector2(790, 360), 55.0)]
+	return l
+
+func _level_09() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_09"
+	l.level_name = "Level 9 — Relativistic Attraction"
+	l.difficulty = 3
+	l.tutorial_text = "First combination: Coulomb attraction plus the speed limit. As these opposite charges close in, the force between them grows enormous — but watch their speed. It still can't cross c. Press Play."
+	l.world_size = Vector2(1280, 720)
+	l.relativistic = true
+	l.speed_of_light = 100.0
+	l.particles = [
+		_particle("electron", Vector2(560, 360)),
+		_particle("positron", Vector2(720, 360)),
+	]
+	l.coulomb_enabled = true
+	l.field_direction_editable = false
+	l.field_strength_editable = false
+	l.objective_kind = LevelDefinition.ObjectiveKind.CAPTURE
+	l.capture_particle_a = 0
+	l.capture_particle_b = 1
 	return l
