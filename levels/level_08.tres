@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="LevelDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/level/obstacle_definition.gd" id="1_k4shk"]
+[ext_resource type="Script" path="res://scripts/level/particle_spawn.gd" id="2_1wmpb"]
+[ext_resource type="Script" path="res://scripts/level/level_definition.gd" id="3_saww6"]
+[ext_resource type="Script" path="res://scripts/level/target_definition.gd" id="4_tk0sc"]
+
+[sub_resource type="Resource" id="Resource_lrlhd"]
+script = ExtResource("2_1wmpb")
+position = Vector2(640, 360)
+
+[sub_resource type="Resource" id="Resource_h5arh"]
+script = ExtResource("4_tk0sc")
+position = Vector2(790, 360)
+radius = 55.0
+
+[resource]
+script = ExtResource("3_saww6")
+id = "level_08"
+level_name = "Level 8 — Symmetry Breaking"
+tutorial_text = "This field has an unstable peak at the center and a stable ring around it. Give the particle a brief nudge in one direction, then dial the field back to zero and watch where it settles."
+difficulty = 3
+particles = Array[ExtResource("2_1wmpb")]([SubResource("Resource_lrlhd")])
+field_strength_min = 0.0
+field_strength_max = 20.0
+symmetry_breaking_enabled = true
+targets = Array[ExtResource("4_tk0sc")]([SubResource("Resource_h5arh")])

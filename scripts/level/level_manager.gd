@@ -65,11 +65,21 @@ func _rebuild_world() -> void:
 	world.interaction_system.enabled = current_level.coulomb_enabled
 	world.bounds = Rect2(Vector2.ZERO, current_level.world_size)
 
+	world.relativistic = current_level.relativistic
+	world.speed_of_light = current_level.speed_of_light
+
+	world.symmetry_breaking.enabled = current_level.symmetry_breaking_enabled
+	world.symmetry_breaking.center = current_level.symmetry_breaking_center
+	world.symmetry_breaking.a = current_level.symmetry_breaking_a
+	world.symmetry_breaking.b = current_level.symmetry_breaking_b
+	world.symmetry_breaking.damping = current_level.symmetry_breaking_damping
+
 	for i in range(current_level.particles.size()):
 		var spawn: ParticleSpawn = current_level.particles[i]
 		var p := Particle.new(ParticleTypes.by_id(spawn.type_id), spawn.position, spawn.velocity)
 		if spawn.mass_override > 0.0:
 			p.mass = spawn.mass_override
+		p.momentum_magnitude = spawn.momentum_magnitude
 		p.spawn_index = i
 		world.add_particle(p)
 
@@ -87,7 +97,11 @@ func _physics_process(_delta: float) -> void:
 
 	_speed_accumulator += sim_speed
 	while _speed_accumulator >= 1.0:
-		world.step(FIXED_DT)
+		# Motion first, then the objective check, then reactions — so a
+		# CAPTURE objective on two colliding particles sees them actually
+		# touching before annihilation/pair production could consume them
+		# first. See PhysicsWorld.step_reactions()'s docstring.
+		world.step_motion(FIXED_DT)
 		replay_recorder.capture(world)
 		_speed_accumulator -= 1.0
 
@@ -95,6 +109,14 @@ func _physics_process(_delta: float) -> void:
 		if new_status != status:
 			status = new_status
 			status_changed.emit(status)
+
+		# Run reactions every tick regardless of what the objective just
+		# found — even on the tick where CAPTURE just succeeded, so the
+		# player still sees the annihilation flash into photons rather
+		# than the sim freezing one frame early on "still touching."
+		# Success/failure was already correctly decided from the
+		# pre-reaction state above.
+		world.step_reactions()
 
 		if status != Objective.Status.RUNNING:
 			is_running = false

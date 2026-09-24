@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="LevelDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/level/obstacle_definition.gd" id="1_spqct"]
+[ext_resource type="Script" path="res://scripts/level/particle_spawn.gd" id="2_0ysph"]
+[ext_resource type="Script" path="res://scripts/level/level_definition.gd" id="3_f84e3"]
+[ext_resource type="Script" path="res://scripts/level/target_definition.gd" id="4_o6y8y"]
+
+[sub_resource type="Resource" id="Resource_yqtgx"]
+script = ExtResource("2_0ysph")
+position = Vector2(150, 360)
+
+[sub_resource type="Resource" id="Resource_425n8"]
+script = ExtResource("4_o6y8y")
+position = Vector2(1130, 360)
+radius = 34.0
+
+[resource]
+script = ExtResource("3_f84e3")
+id = "level_05"
+level_name = "Level 5 — Nothing Outruns Light"
+tutorial_text = "This universe has a speed limit, c. Push as hard as you like — watch the trail: instead of spreading further and further apart, the dots settle into a steady rhythm as your speed approaches (but never reaches) the limit."
+difficulty = 2
+particles = Array[ExtResource("2_0ysph")]([SubResource("Resource_yqtgx")])
+field_direction_editable = false
+field_strength_min = 0.0
+field_strength_max = 300.0
+relativistic = true
+speed_of_light = 400.0
+targets = Array[ExtResource("4_o6y8y")]([SubResource("Resource_425n8")])

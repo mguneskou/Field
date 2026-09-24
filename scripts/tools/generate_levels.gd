@@ -21,6 +21,10 @@ func _init() -> void:
 	_save(_level_02())
 	_save(_level_03())
 	_save(_level_04())
+	_save(_level_05())
+	_save(_level_06())
+	_save(_level_07())
+	_save(_level_08())
 
 	print("Level generation complete.")
 	quit(0)
@@ -38,6 +42,11 @@ func _particle(type_id: String, position: Vector2, velocity: Vector2 = Vector2.Z
 	s.type_id = type_id
 	s.position = position
 	s.velocity = velocity
+	return s
+
+func _photon(position: Vector2, velocity: Vector2, momentum_magnitude: float) -> ParticleSpawn:
+	var s := _particle("photon", position, velocity)
+	s.momentum_magnitude = momentum_magnitude
 	return s
 
 func _target(position: Vector2, radius: float, particle_index: int = 0) -> TargetDefinition:
@@ -127,4 +136,87 @@ func _level_04() -> LevelDefinition:
 	l.objective_kind = LevelDefinition.ObjectiveKind.CAPTURE
 	l.capture_particle_a = 0
 	l.capture_particle_b = 1
+	return l
+
+func _level_05() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_05"
+	l.level_name = "Level 5 — Nothing Outruns Light"
+	l.difficulty = 2
+	l.tutorial_text = "This universe has a speed limit, c. Push as hard as you like — watch the trail: instead of spreading further and further apart, the dots settle into a steady rhythm as your speed approaches (but never reaches) the limit."
+	l.world_size = Vector2(1280, 720)
+	l.relativistic = true
+	l.speed_of_light = 400.0
+	l.particles = [_particle("positive", Vector2(150, 360))]
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = false
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 300.0
+	l.targets = [_target(Vector2(1130, 360), 34.0)]
+	return l
+
+func _level_06() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_06"
+	l.level_name = "Level 6 — Annihilation"
+	l.difficulty = 2
+	l.tutorial_text = "An electron and a positron are opposite charges — point the field so they're both pulled toward each other. When they touch: e⁻ + e⁺ → γ + γ. Matter into pure energy."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [
+		_particle("electron", Vector2(450, 360)),
+		_particle("positron", Vector2(830, 360)),
+	]
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 80.0
+	l.objective_kind = LevelDefinition.ObjectiveKind.CAPTURE
+	l.capture_particle_a = 0
+	l.capture_particle_b = 1
+	return l
+
+func _level_07() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_07"
+	l.level_name = "Level 7 — Pair Production"
+	l.difficulty = 2
+	l.tutorial_text = "The reverse is also true: enough energy in one place can create matter out of pure light. γ + γ → e⁻ + e⁺. Press Play and watch the flash."
+	l.world_size = Vector2(1280, 720)
+	l.speed_of_light = 300.0
+	l.particles = [
+		_photon(Vector2(300, 360), Vector2(300, 0), 700.0),
+		_photon(Vector2(980, 360), Vector2(-300, 0), 700.0),
+	]
+	l.field_direction_editable = false
+	l.field_strength_editable = false
+	l.targets = [
+		_target(Vector2(640, 180), 44.0, -1),
+		_target(Vector2(640, 540), 44.0, -1),
+	]
+	return l
+
+func _level_08() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_08"
+	l.level_name = "Level 8 — Symmetry Breaking"
+	l.difficulty = 3
+	l.tutorial_text = "This field has an unstable peak at the center and a stable ring around it. Give the particle a brief nudge in one direction, then dial the field back to zero and watch where it settles."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [_particle("positive", Vector2(640, 360))]
+	l.symmetry_breaking_enabled = true
+	l.symmetry_breaking_center = Vector2(640, 360)
+	l.symmetry_breaking_a = 0.01
+	l.symmetry_breaking_b = 150.0
+	l.symmetry_breaking_damping = 0.5
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 20.0
+	l.targets = [_target(Vector2(790, 360), 55.0)]
 	return l

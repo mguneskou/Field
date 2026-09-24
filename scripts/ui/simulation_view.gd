@@ -24,6 +24,7 @@ func _draw() -> void:
 		return
 	_draw_electric_field()
 	_draw_magnetic_field()
+	_draw_symmetry_breaking()
 	_draw_obstacles()
 	_draw_targets()
 	_draw_particles()
@@ -73,6 +74,21 @@ func _draw_magnetic_field() -> void:
 			y += spacing
 		x += spacing
 
+func _draw_symmetry_breaking() -> void:
+	var pot := level_manager.world.symmetry_breaking
+	if not pot.enabled:
+		return
+	var t := Time.get_ticks_msec() / 1000.0
+	# Faint radial gradient hint (a handful of concentric rings) plus a
+	# brighter ring right at the stable radius, so the "vacuum ring" the
+	# physics settles particles onto is actually visible to aim for.
+	for i in range(4):
+		var r: float = pot.b * (0.4 + 0.2 * i)
+		draw_arc(pot.center, r, 0, TAU, 48, Color(0.7, 0.5, 1.0, 0.05), 1.0)
+	var pulse: float = 0.5 + 0.5 * sin(t * 1.5)
+	draw_arc(pot.center, pot.b, 0, TAU, 64, Color(0.75, 0.55, 1.0, 0.35 + 0.15 * pulse), 2.0)
+	draw_circle(pot.center, 3.0, Color(0.75, 0.55, 1.0, 0.6))
+
 func _draw_obstacles() -> void:
 	for o in current_level.obstacles:
 		draw_circle(o.position, o.radius, Color(0.9, 0.25, 0.25, 0.22))
@@ -118,7 +134,15 @@ func _draw_particle_body(p: Particle) -> void:
 		var a: float = 0.05 * float(4 - i)
 		draw_circle(p.position, glow_r, Color(p.color.r, p.color.g, p.color.b, a))
 
-	if p.charge > 0.0:
+	if p.type_id == "photon":
+		# A small four-point sparkle, distinct from neutral particles'
+		# plain dot — photons are massless/chargeless too, but they're a
+		# fundamentally different kind of thing (always moving at c).
+		var s: float = p.radius * 1.6
+		draw_line(p.position + Vector2(-s, 0), p.position + Vector2(s, 0), p.color, 2.0)
+		draw_line(p.position + Vector2(0, -s), p.position + Vector2(0, s), p.color, 2.0)
+		draw_circle(p.position, p.radius * 0.4, p.color)
+	elif p.charge > 0.0:
 		draw_circle(p.position, p.radius, p.color)
 	elif p.charge < 0.0:
 		draw_arc(p.position, p.radius, 0, TAU, 24, p.color, 2.5)

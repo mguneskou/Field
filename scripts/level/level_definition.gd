@@ -30,6 +30,23 @@ extends Resource
 
 @export var coulomb_enabled: bool = false
 
+@export_group("Relativity")
+## When true, particles are integrated with relativistic momentum
+## dynamics (velocity asymptotically bounded by speed_of_light) instead
+## of classical F=ma. See PhysicsWorld.relativistic / RelativisticKinematics.
+@export var relativistic: bool = false
+@export var speed_of_light: float = 2000.0
+
+@export_group("Symmetry Breaking")
+## A rotationally-symmetric "Mexican hat" potential (see
+## SymmetryBreakingPotential) a level can optionally enable: unstable at
+## its center, a stable ring of minima at radius `symmetry_breaking_b`.
+@export var symmetry_breaking_enabled: bool = false
+@export var symmetry_breaking_center: Vector2 = Vector2(640, 360)
+@export var symmetry_breaking_a: float = 0.01
+@export var symmetry_breaking_b: float = 150.0
+@export var symmetry_breaking_damping: float = 0.5
+
 @export_group("Objectives")
 ## REACH_TARGET: every entry in `targets` must be simultaneously occupied.
 ## CHECKPOINTS: `targets` must be visited in array order.

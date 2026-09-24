@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="LevelDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/level/obstacle_definition.gd" id="1_q35g4"]
+[ext_resource type="Script" path="res://scripts/level/particle_spawn.gd" id="2_cyrga"]
+[ext_resource type="Script" path="res://scripts/level/level_definition.gd" id="3_pu23j"]
+[ext_resource type="Script" path="res://scripts/level/target_definition.gd" id="4_64cx1"]
+
+[sub_resource type="Resource" id="Resource_2ko14"]
+script = ExtResource("2_cyrga")
+type_id = "photon"
+position = Vector2(300, 360)
+velocity = Vector2(300, 0)
+momentum_magnitude = 700.0
+
+[sub_resource type="Resource" id="Resource_03d1t"]
+script = ExtResource("2_cyrga")
+type_id = "photon"
+position = Vector2(980, 360)
+velocity = Vector2(-300, 0)
+momentum_magnitude = 700.0
+
+[sub_resource type="Resource" id="Resource_846yr"]
+script = ExtResource("4_64cx1")
+position = Vector2(640, 180)
+radius = 44.0
+particle_index = -1
+
+[sub_resource type="Resource" id="Resource_hx74v"]
+script = ExtResource("4_64cx1")
+position = Vector2(640, 540)
+radius = 44.0
+particle_index = -1
+
+[resource]
+script = ExtResource("3_pu23j")
+id = "level_07"
+level_name = "Level 7 — Pair Production"
+tutorial_text = "The reverse is also true: enough energy in one place can create matter out of pure light. γ + γ → e⁻ + e⁺. Press Play and watch the flash."
+difficulty = 2
+particles = Array[ExtResource("2_cyrga")]([SubResource("Resource_2ko14"), SubResource("Resource_03d1t")])
+field_direction_editable = false
+field_strength_editable = false
+speed_of_light = 300.0
+targets = Array[ExtResource("4_64cx1")]([SubResource("Resource_846yr"), SubResource("Resource_hx74v")])

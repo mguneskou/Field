@@ -15,6 +15,7 @@ func _init() -> void:
 		"res://tests/test_annihilation.gd",
 		"res://tests/test_pair_production.gd",
 		"res://tests/test_speculative_unified_field.gd",
+		"res://tests/test_level_manager_physics_wiring.gd",
 		"res://tests/test_symmetry_breaking.gd",
 		"res://tests/test_quantum_wave_1d.gd",
 		"res://tests/test_quantum_wave_2d.gd",
