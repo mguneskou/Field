@@ -17,6 +17,7 @@ var is_running: bool = false
 var sim_speed: float = 1.0
 var status: int = Objective.Status.RUNNING
 var replay_recorder: ReplayRecorder = ReplayRecorder.new()
+var objective: Objective = Objective.new()
 
 var _speed_accumulator: float = 0.0
 
@@ -75,6 +76,7 @@ func _rebuild_world() -> void:
 	is_running = false
 	_speed_accumulator = 0.0
 	status = Objective.Status.RUNNING
+	objective = Objective.new()
 	replay_recorder.start()
 	status_changed.emit(status)
 	level_loaded.emit(current_level)
@@ -89,7 +91,7 @@ func _physics_process(_delta: float) -> void:
 		replay_recorder.capture(world)
 		_speed_accumulator -= 1.0
 
-		var new_status := Objective.evaluate(current_level, world)
+		var new_status := objective.evaluate(current_level, world, FIXED_DT)
 		if new_status != status:
 			status = new_status
 			status_changed.emit(status)

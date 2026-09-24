@@ -31,6 +31,24 @@ extends Resource
 @export var coulomb_enabled: bool = false
 
 @export_group("Objectives")
+## REACH_TARGET: every entry in `targets` must be simultaneously occupied.
+## CHECKPOINTS: `targets` must be visited in array order.
+## HOLD_IN_REGION: the particle at targets[0].particle_index must stay
+##   inside targets[0] for `hold_duration` seconds (need not be contiguous
+##   across pauses, but resets on reset()).
+## CAPTURE: particles `capture_particle_a`/`b` must touch each other.
+## SEPARATE: particles `separate_particle_a`/`b` must reach `separate_distance` apart.
+enum ObjectiveKind { REACH_TARGET, CHECKPOINTS, HOLD_IN_REGION, CAPTURE, SEPARATE }
+
+@export var objective_kind: ObjectiveKind = ObjectiveKind.REACH_TARGET
 @export var targets: Array[TargetDefinition] = []
 @export var obstacles: Array[ObstacleDefinition] = []
 @export var time_limit: float = -1.0 # -1 = no limit
+
+@export_group("Objective Parameters")
+@export var hold_duration: float = 2.0
+@export var capture_particle_a: int = 0
+@export var capture_particle_b: int = 1
+@export var separate_particle_a: int = 0
+@export var separate_particle_b: int = 1
+@export var separate_distance: float = 300.0

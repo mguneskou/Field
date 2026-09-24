@@ -81,9 +81,22 @@ func _draw_obstacles() -> void:
 func _draw_targets() -> void:
 	var t := Time.get_ticks_msec() / 1000.0
 	var pulse: float = 0.5 + 0.5 * sin(t * 2.0)
-	for target in current_level.targets:
-		draw_arc(target.position, target.radius, 0, TAU, 40, Color(0.35, 1.0, 0.55, 0.4 + 0.3 * pulse), 2.0)
-		draw_circle(target.position, max(target.radius * 0.12, 2.0), Color(0.35, 1.0, 0.55, 0.85))
+	var is_checkpoints := current_level.objective_kind == LevelDefinition.ObjectiveKind.CHECKPOINTS
+	var next_index := level_manager.objective.next_checkpoint_index if is_checkpoints else -1
+
+	for i in range(current_level.targets.size()):
+		var target: TargetDefinition = current_level.targets[i]
+		if is_checkpoints and i < next_index:
+			draw_arc(target.position, target.radius, 0, TAU, 32, Color(0.5, 0.5, 0.55, 0.35), 2.0)
+			continue
+		var color := Color(0.35, 1.0, 0.55, 0.4 + 0.3 * pulse)
+		if is_checkpoints and i > next_index:
+			color = Color(0.35, 0.6, 1.0, 0.25)
+		draw_arc(target.position, target.radius, 0, TAU, 40, color, 2.0)
+		draw_circle(target.position, max(target.radius * 0.12, 2.0), color)
+		if is_checkpoints:
+			draw_string(ThemeDB.fallback_font, target.position + Vector2(-4, 5), str(i + 1),
+				HORIZONTAL_ALIGNMENT_CENTER, -1, 14, Color(1, 1, 1, 0.8))
 
 func _draw_particles() -> void:
 	for p in level_manager.world.particles:
