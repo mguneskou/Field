@@ -9,8 +9,11 @@ extends RefCounted
 ## physics compromise — real Coulomb's law has no such floor). The constant
 ## itself is tuned for readable on-screen gameplay, not SI units.
 
-var coulomb_constant: float = 800.0
-var softening: float = 4.0
+## Tuned so a charge-1 pair ~100px apart (a typical on-screen gameplay
+## distance) produces acceleration comparable to a mid-strength E field
+## (tens of px/s^2) rather than something imperceptibly small.
+var coulomb_constant: float = 250000.0
+var softening: float = 8.0
 var enabled: bool = true
 
 ## Returns a Dictionary mapping each input Particle to the net Coulomb

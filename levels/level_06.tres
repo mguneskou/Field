@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="LevelDefinition" format=3]
+
+[ext_resource type="Script" path="res://scripts/level/obstacle_definition.gd" id="1_qwnk1"]
+[ext_resource type="Script" path="res://scripts/level/particle_spawn.gd" id="2_21asb"]
+[ext_resource type="Script" path="res://scripts/level/level_definition.gd" id="3_xhrxc"]
+[ext_resource type="Script" path="res://scripts/level/target_definition.gd" id="4_kt1g5"]
+
+[sub_resource type="Resource" id="Resource_e2tf3"]
+script = ExtResource("2_21asb")
+type_id = "neutral"
+position = Vector2(300, 200)
+
+[sub_resource type="Resource" id="Resource_e0ntj"]
+script = ExtResource("2_21asb")
+position = Vector2(300, 520)
+
+[sub_resource type="Resource" id="Resource_6o0na"]
+script = ExtResource("4_kt1g5")
+position = Vector2(980, 520)
+radius = 32.0
+particle_index = 1
+
+[resource]
+script = ExtResource("3_xhrxc")
+id = "level_06"
+level_name = "Level 6 — Neutral Particle"
+tutorial_text = "Neutral particles ignore electric and magnetic fields entirely. Only the charged particle below will respond — watch the difference."
+particles = Array[ExtResource("2_21asb")]([SubResource("Resource_e2tf3"), SubResource("Resource_e0ntj")])
+field_strength_min = 0.0
+field_strength_max = 60.0
+targets = Array[ExtResource("4_kt1g5")]([SubResource("Resource_6o0na")])

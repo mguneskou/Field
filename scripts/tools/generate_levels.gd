@@ -15,6 +15,11 @@ func _init() -> void:
 	_save(_level_03())
 	_save(_level_04())
 	_save(_level_05())
+	_save(_level_06())
+	_save(_level_07())
+	_save(_level_08())
+	_save(_level_09())
+	_save(_level_10())
 
 	print("Level generation complete.")
 	quit(0)
@@ -136,4 +141,107 @@ func _level_05() -> LevelDefinition:
 	l.magnetic_strength_max = 40.0
 	l.obstacles = [_obstacle(Vector2(640, 400), 50.0)]
 	l.targets = [_target(Vector2(1000, 200), 40.0)]
+	return l
+
+func _level_06() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_06"
+	l.level_name = "Level 6 — Neutral Particle"
+	l.difficulty = 1
+	l.tutorial_text = "Neutral particles ignore electric and magnetic fields entirely. Only the charged particle below will respond — watch the difference."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [
+		_particle("neutral", Vector2(300, 200)),
+		_particle("positive", Vector2(300, 520)),
+	]
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 60.0
+	l.targets = [_target(Vector2(980, 520), 32.0, 1)]
+	return l
+
+func _level_07() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_07"
+	l.level_name = "Level 7 — Stationary vs Moving"
+	l.difficulty = 2
+	l.tutorial_text = "A stationary charge feels no magnetic force. This field has a fixed magnetic component — but nothing happens until you give the particle some velocity with the electric field."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [_particle("positive", Vector2(300, 500))]
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 80.0
+	l.initial_magnetic_strength = 22.0
+	l.magnetic_editable = false
+	l.targets = [_target(Vector2(950, 180), 36.0)]
+	return l
+
+func _level_08() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_08"
+	l.level_name = "Level 8 — Magnetic Strength"
+	l.difficulty = 2
+	l.tutorial_text = "Only the magnetic field is yours to control now. Its strength sets how tightly the path curves — and its sign decides which way."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [_particle("positive", Vector2(250, 400), Vector2.ZERO)]
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 40.0
+	l.field_direction_editable = false
+	l.field_strength_editable = false
+	l.field_strength_min = 40.0
+	l.field_strength_max = 40.0
+	l.initial_magnetic_strength = 0.0
+	l.magnetic_editable = true
+	l.magnetic_strength_min = -60.0
+	l.magnetic_strength_max = 60.0
+	l.targets = [_target(Vector2(880, 150), 40.0)]
+	return l
+
+func _level_09() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_09"
+	l.level_name = "Level 9 — Two Particles, One Field"
+	l.difficulty = 2
+	l.tutorial_text = "One field, two charges, two different responses. Point the field so the positive charge rides with it and the negative charge rides against it — into their own targets at the same time."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [
+		_particle("positive", Vector2(640, 200)),
+		_particle("negative", Vector2(640, 520)),
+	]
+	l.initial_field_direction = Vector2.RIGHT
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = true
+	l.field_strength_editable = true
+	l.field_strength_min = 0.0
+	l.field_strength_max = 70.0
+	l.targets = [
+		_target(Vector2(1080, 200), 32.0, 0),
+		_target(Vector2(200, 520), 32.0, 1),
+	]
+	return l
+
+func _level_10() -> LevelDefinition:
+	var l := LevelDefinition.new()
+	l.id = "level_10"
+	l.level_name = "Level 10 — Coulomb Attraction"
+	l.difficulty = 1
+	l.tutorial_text = "Opposite charges attract through the Coulomb force (F = kq1q2/r²) — no field needed. Press Play and watch them come together."
+	l.world_size = Vector2(1280, 720)
+	l.particles = [
+		_particle("positive", Vector2(560, 360)),
+		_particle("negative", Vector2(720, 360)),
+	]
+	l.coulomb_enabled = true
+	l.initial_field_strength = 0.0
+	l.field_direction_editable = false
+	l.field_strength_editable = false
+	l.objective_kind = LevelDefinition.ObjectiveKind.CAPTURE
+	l.capture_particle_a = 0
+	l.capture_particle_b = 1
 	return l
