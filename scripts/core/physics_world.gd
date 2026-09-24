@@ -9,6 +9,7 @@ var electric_field: ElectricField = ElectricField.new()
 var magnetic_field: MagneticField = MagneticField.new()
 var interaction_system: InteractionSystem = InteractionSystem.new()
 var annihilation_system: AnnihilationSystem = AnnihilationSystem.new()
+var symmetry_breaking: SymmetryBreakingPotential = SymmetryBreakingPotential.new()
 var bounds: Rect2 = Rect2(-100000, -100000, 200000, 200000)
 
 var time: float = 0.0
@@ -37,7 +38,7 @@ func step(dt: float) -> void:
 		if not p.alive:
 			continue
 		var interaction_force: Vector2 = interaction_forces.get(p, Vector2.ZERO)
-		var e_like_force: Vector2 = electric_field.force_on(p) + interaction_force
+		var e_like_force: Vector2 = electric_field.force_on(p) + interaction_force + symmetry_breaking.force_on(p)
 
 		if relativistic:
 			# Relativistic + magnetic is a rarer combination not yet exercised
